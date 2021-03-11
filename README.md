@@ -1,8 +1,8 @@
-# API v5 Example 
+# API v5 Examples 
 
 ## How To Install 
-1. Place both files on a public website. 
-2. Edit the API key variable at the top of index.html 
+1. Place the files on a website or in a directory you can access. 
+2. Edit the API key variable in apikey.js
 3. Load the site in your web browser. 
 
 ## What is this? 
