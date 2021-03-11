@@ -1,0 +1,43 @@
+<html>
+	<head>
+		<script type="text/javascript">
+			function load() { 
+        var apikey = XXXXXXX
+				var doc = doc || document; 
+				var script = doc.createElement('script'); 
+				script.src = "https://api.phish.net/v5/setlists/showdate/"+document.getElementById('showdate').value+".json?apikey="+apikey+"&callback=phishnet_setlist"; 
+				script.id = document.getElementById('showdate').value;
+				document.head.appendChild(script) 
+				document.head.appendChild( script );
+			}
+		</script>
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+		<script src="./setlists.js"></script>
+	</head>
+	<body>
+		<p>&nbsp;</p>
+		<div class='container'>
+			<nav class="navbar navbar-expand-lg navbar navbar-light" style="background-color: #d2e1ec;">
+				<div class="container-fluid">
+					<a class="navbar-brand" href="#"><b>Phish.net API v5 Demo</b></a>
+					<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				    	<span class="navbar-toggler-icon"></span>
+					</button>	
+					<div class="collapse navbar-collapse" id="navbarSupportedContent">
+						<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+						</ul>
+						<form class="d-flex">
+							<input class="form-control me-2" type="date" id="showdate" placeholder="YYYY-mm-dd" value="2009-11-01">
+							<button type="button" class="btn btn-sm btn-small btn-primary" onclick="load()">Load</button>
+						</form>
+					</div>
+				</div>
+			</nav>	
+			<br>
+			<div id="setlist"></div>
+			<script>
+				load('2009-11-01');
+			</script>
+		</div>
+	</body>
+</html>
