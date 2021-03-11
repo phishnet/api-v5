@@ -2,7 +2,7 @@
 
 ## How To Install 
 1. Place the files on a website or in a directory you can access. 
-2. Edit the API key variable in apikey.js
+2. Edit the API key variable in scripts/apikey.js
 3. Load the site in your web browser. 
 
 ## What is this? 
