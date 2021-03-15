@@ -5,7 +5,7 @@ if( typeof phishnet_setlist == "undefined" ) {
 		setString = '';
 		el.innerHTML = "<h3><a href='"
 			+ json.data[0].permalink + "'>" + json.data[0].artist_name + " &mdash; "+json.data[0].showdate + " " + json.data[0].venue + ", "
-			+ json.data[0].city + ", " + json.data[0].state + "</a> (<a href='#!/"+json.data[0].showyear+"' onclick=\"load_year('"+json.data[0].showyear+"')\">"+json.data[0].showyear+"</a>)</h3>"
+			+ json.data[0].city + ", " + json.data[0].state + "</a></h3>"
 		for(i=0;i<json.data.length;i++) {
 			var n = json.data[i];
 			if(last_set!=n.set) { 
