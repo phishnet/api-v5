@@ -3,12 +3,22 @@
 		<title>Phish.net v5 API Test</title>
 		<script src="./scripts/apikey.js"></script>
 		<script type="text/javascript">		
+			window.etpTitle = "Location"
 			function display_showyears() { 
 				var doc = doc || document; 
 				var script = doc.createElement('script'); 
 				script.src = "https://api.phish.net/v5/shows.json?apikey="+apikey+"&order_by=showyear&callback=phishnet_year_nav"; 
 				script.id = "display_showyears";
 				document.head.appendChild(script) 
+			}
+			function load_location(field,arg, ttl) {
+				  window.etpTitle = ttl; 
+				  var doc = doc || document; 
+				  var script = doc.createElement('script'); 
+				  script.src = "https://api.phish.net/v5/shows/"+field+"/"+arg+".json?apikey="+apikey+"&order_by=showdate&callback=phishnet_venues"; 
+				  var etpTitle = "Every Time Played";
+				  script.id = field+"-".arg;
+				  document.head.appendChild(script) 
 			}
 		  	function load_year(year) { 
 			  var doc = doc || document; 
@@ -24,7 +34,7 @@
 			function load_setlist() { 
 				var doc = doc || document; 
 				var script = doc.createElement('script'); 
-				script.src = "https://api.phish.net/v5/setlists/showdate/"+document.getElementById('showdate').value+".json?apikey="+apikey+"&callback=phishnet_setlist"; 
+				script.src = "https://api.phish.net/v5/setlists/showdate/"+document.getElementById('showdate').value+".json?apikey="+apikey+"&order_by=showdate&callback=phishnet_setlist"; 
 				script.id = document.getElementById('showdate').value;
 				document.head.appendChild(script) 
 			}
@@ -32,17 +42,18 @@
 			function load_songlist(slug) { 
 				var doc = doc || document; 
 				var script = doc.createElement('script'); 
-				script.src = "https://api.phish.net/v5/setlists/slug/"+slug+".json?apikey="+apikey+"&callback=phishnet_songlist"; 
+				script.src = "https://api.phish.net/v5/setlists/slug/"+slug+".json?apikey="+apikey+"&order_by=showdate&callback=phishnet_songlist"; 
 				script.id = slug;
 				document.head.appendChild(script) 
 			}
 		</script>
 		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
 		<!-- version numbers are only used for cache busting --> 
-		<script src="./scripts/setlist.js?v=1"></script>
-		<script src="./scripts/song-list.js?v=1"></script>
-		<script src="./scripts/year-load.js?v=1"></script>
-		<script src="./scripts/display_showyears.js?v=1"></script>
+		<script src="./scripts/setlist.js?v=18"></script>
+		<script src="./scripts/song-list.js?v=18"></script>
+		<script src="./scripts/year-load.js?v=18"></script>
+		<script src="./scripts/venues.js?v=18"></script>
+		<script src="./scripts/display_showyears.js?v=18"></script>
 		
 	</head>
 	<body>
