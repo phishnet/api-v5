@@ -1,18 +1,48 @@
 <html>
 	<head>
 		<script src="./scripts/apikey.js"></script>
-		<script type="text/javascript">
-			function load() { 
+		<script type="text/javascript">		
+			function display_showyears() { 
+				var doc = doc || document; 
+				var script = doc.createElement('script'); 
+				script.src = "https://api.phish.net/v5/shows.json?apikey="+apikey+"&order_by=showyear&callback=phishnet_year_nav"; 
+				script.id = "display_showyears";
+				document.head.appendChild(script) 
+			}
+		  	function load_year(year) { 
+			  var doc = doc || document; 
+			  var script = doc.createElement('script'); 
+			  script.src = "https://api.phish.net/v5/setlists/showyear/"+year+".json?apikey="+apikey+"&callback=phishnet_years"; 
+			  script.id = year;
+			  document.head.appendChild(script) 
+			}
+			function load_showdate(showdate) { 
+				document.getElementById('showdate').value = showdate; 
+				load_setlist(); 
+			}
+			function load_setlist() { 
 				var doc = doc || document; 
 				var script = doc.createElement('script'); 
 				script.src = "https://api.phish.net/v5/setlists/showdate/"+document.getElementById('showdate').value+".json?apikey="+apikey+"&callback=phishnet_setlist"; 
 				script.id = document.getElementById('showdate').value;
 				document.head.appendChild(script) 
-				document.head.appendChild( script );
+			}
+			
+			function load_songlist(slug) { 
+				var doc = doc || document; 
+				var script = doc.createElement('script'); 
+				script.src = "https://api.phish.net/v5/setlists/slug/"+slug+".json?apikey="+apikey+"&callback=phishnet_songlist"; 
+				script.id = slug;
+				document.head.appendChild(script) 
 			}
 		</script>
 		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
-		<script src="./scripts/setlist.js"></script>
+		<!-- version numbers are only used for cache busting --> 
+		<script src="./scripts/setlist.js?v=1"></script>
+		<script src="./scripts/song-list.js?v=1"></script>
+		<script src="./scripts/year-load.js?v=1"></script>
+		<script src="./scripts/display_showyears.js?v=1"></script>
+		
 	</head>
 	<body>
 		<p>&nbsp;</p>
@@ -28,15 +58,17 @@
 						</ul>
 						<form class="d-flex">
 							<input class="form-control me-2" type="date" id="showdate" placeholder="YYYY-mm-dd" value="2009-11-01">
-							<button type="button" class="btn btn-sm btn-small btn-primary" onclick="load()">Load</button>
+							<button type="button" class="btn btn-sm btn-small btn-primary" onclick="load_setlist()">Load</button>
 						</form>
 					</div>
 				</div>
 			</nav>	
 			<br>
+			<div class='card-body' id="pnet_nav"></div>
 			<div id="setlist"></div>
 			<script>
-				load('2009-11-01');
+				display_showyears();
+				load_setlist();
 			</script>
 		</div>
 	</body>
