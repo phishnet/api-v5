@@ -1,87 +1,89 @@
-<html>
-	<head>
-		<title>Phish.net v5 API Test</title>
-		<script src="./scripts/apikey.js"></script>
-		<script type="text/javascript">		
-			window.etpTitle = "Location"
-			function display_showyears() { 
-				var doc = doc || document; 
-				var script = doc.createElement('script'); 
-				script.src = "https://api.phish.net/v5/shows.json?apikey="+apikey+"&order_by=showyear&callback=phishnet_year_nav"; 
-				script.id = "display_showyears";
-				document.head.appendChild(script) 
-			}
-			function load_location(field,arg, ttl) {
-				  window.etpTitle = ttl; 
-				  var doc = doc || document; 
-				  var script = doc.createElement('script'); 
-				  script.src = "https://api.phish.net/v5/shows/"+field+"/"+arg+".json?apikey="+apikey+"&order_by=showdate&callback=phishnet_venues"; 
-				  var etpTitle = "Every Time Played";
-				  script.id = field+"-".arg;
-				  document.head.appendChild(script) 
-			}
-		  	function load_year(year) { 
-			  var doc = doc || document; 
-			  var script = doc.createElement('script'); 
-			  script.src = "https://api.phish.net/v5/setlists/showyear/"+year+".json?apikey="+apikey+"&callback=phishnet_years"; 
-			  script.id = year;
-			  document.head.appendChild(script) 
-			}
-			function load_showdate(showdate) { 
-				document.getElementById('showdate').value = showdate; 
-				load_setlist(); 
-			}
-			function load_setlist() { 
-				var doc = doc || document; 
-				var script = doc.createElement('script'); 
-				script.src = "https://api.phish.net/v5/setlists/showdate/"+document.getElementById('showdate').value+".json?apikey="+apikey+"&order_by=showdate&callback=phishnet_setlist"; 
-				script.id = document.getElementById('showdate').value;
-				document.head.appendChild(script) 
-			}
-			
-			function load_songlist(slug) { 
-				var doc = doc || document; 
-				var script = doc.createElement('script'); 
-				script.src = "https://api.phish.net/v5/setlists/slug/"+slug+".json?apikey="+apikey+"&order_by=showdate&callback=phishnet_songlist"; 
-				script.id = slug;
-				document.head.appendChild(script) 
-			}
-		</script>
-		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
-		<!-- version numbers are only used for cache busting --> 
-		<script src="./scripts/setlist.js?v=18"></script>
-		<script src="./scripts/song-list.js?v=18"></script>
-		<script src="./scripts/year-load.js?v=18"></script>
-		<script src="./scripts/venues.js?v=18"></script>
-		<script src="./scripts/display_showyears.js?v=18"></script>
-		
-	</head>
-	<body>
-		<p>&nbsp;</p>
-		<div class='container'>
-			<nav class="navbar navbar-expand-lg navbar navbar-light" style="background-color: #d2e1ec;">
-				<div class="container-fluid">
-					<a class="navbar-brand" href="#"><b>Phish.net API v5 Demo</b></a>
-					<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-				    	<span class="navbar-toggler-icon"></span>
-					</button>	
-					<div class="collapse navbar-collapse" id="navbarSupportedContent">
-						<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-						</ul>
-						<form class="d-flex">
-							<input class="form-control me-2" type="date" id="showdate" placeholder="YYYY-mm-dd" value="2009-11-01">
-							<button type="button" class="btn btn-sm btn-small btn-primary" onclick="load_setlist()">Load</button>
-						</form>
-					</div>
-				</div>
-			</nav>	
-			<br>
-			<div class='card-body' id="pnet_nav"></div>
-			<div id="setlist"></div>
-			<script>
-				display_showyears();
-				load_setlist();
-			</script>
-		</div>
-	</body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Phish.net API v5 Examples</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .readme { line-height: 1.8; font-size: 0.95rem; color: #444; }
+    .readme h2 { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 500; margin: 2rem 0 0.5rem; color: #111; }
+    .readme p { margin: 0.5rem 0; }
+    .readme ol, .readme ul { margin: 0.5rem 0 0.5rem 1.5rem; }
+    .readme li { margin: 0.3rem 0; }
+    .readme code { font-size: 0.85em; background: #f0f0f0; padding: 0.15em 0.4em; border-radius: 3px; }
+    .examples { margin: 2rem 0; }
+    .examples a { display: inline-block; padding: 0.6rem 1.4rem; margin: 0.3rem 0.3rem 0.3rem 0; border-radius: 6px; background: #111; color: #fff; text-decoration: none; font-size: 0.85rem; font-weight: 500; transition: background 0.15s; }
+    .examples a:hover { background: #333; }
+  </style>
+</head>
+<body>
+  <header>
+    <div style="max-width:900px;margin:0 auto;">
+      <h1>Phish.net API v5</h1>
+      <p>Example uses of the Phish.net API</p>
+    </div>
+  </header>
+
+  <main style="max-width:900px;">
+    <div class="examples" id="examples"><h2 style="margin-top:0;">Examples:</h2></div>
+    <div class="readme" id="readme"></div>
+  </main>
+
+  <footer>
+    Data provided by <a href="https://phish.net">Phish.net</a> &middot;
+    <a href="https://docs.phish.net">API Docs</a> &middot;
+    <a href="https://github.com/phishnet/api-v5">GitHub</a>
+  </footer>
+
+  <script>
+    // Scan /examples/ for .html files and build links
+    const exampleFiles = [
+      { href: 'examples/setlist-browser.html', label: 'Setlist Browser' },
+      { href: 'examples/recent-setlists.html', label: 'Recent Setlists' },
+      { href: 'examples/jam-chart.html', label: 'Jam Chart Explorer' },
+      { href: 'examples/venue-explorer.html', label: 'Venue Explorer' }
+    ];
+    const exEl = document.getElementById('examples');
+    exEl.innerHTML += exampleFiles.map(f =>
+      `<a href="${f.href}">${f.label}</a>`
+    ).join('');
+
+    // Fetch and render README.md as simple HTML
+    fetch('README.md')
+      .then(r => r.text())
+      .then(md => {
+        const html = md
+          .split('\n')
+          .filter(line => !line.startsWith('# '))  // skip the h1, we have our own header
+          .join('\n')
+          .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+          .replace(/^(\d+)\. (.+)$/gm, '<li>$2</li>')
+          .replace(/`([^`]+)`/g, '<code>$1</code>')
+          .replace(/(<li>.*<\/li>\n?)+/g, match => '<ol>' + match + '</ol>')
+          .replace(/\n{2,}/g, '</p><p>')
+          .replace(/^(?!<[ho])/gm, function(m, offset, str) {
+            // wrap loose text lines in <p> if not already a tag
+            return '';
+          });
+        // Clean pass: wrap remaining bare text in paragraphs
+        const cleaned = html
+          .split('\n')
+          .map(line => {
+            const trimmed = line.trim();
+            if (!trimmed) return '';
+            if (trimmed.startsWith('<')) return trimmed;
+            return '<p>' + trimmed + '</p>';
+          })
+          .join('\n');
+        document.getElementById('readme').innerHTML = cleaned;
+      })
+      .catch(() => {
+        document.getElementById('readme').innerHTML = '<p>Could not load README.</p>';
+      });
+  </script>
+</body>
 </html>
