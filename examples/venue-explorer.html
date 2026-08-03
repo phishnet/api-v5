@@ -3,128 +3,45 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Venue Explorer – Phish.net API Demo</title>
+  <title>Venue Explorer &ndash; Phish.net API Demo</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bree+Serif&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../style.css">
-  <style>
-    .search-bar { display: flex; gap: 0.5rem; margin-bottom: 2rem; }
-    .search-bar input { flex: 1; font-family: 'Inter', sans-serif; font-size: 0.9rem; border: 1px solid #ddd; border-radius: 6px; padding: 0.5rem 0.9rem; outline: none; transition: border-color 0.2s; }
-    .search-bar input:focus { border-color: #111; }
-    .venue-list { display: flex; flex-direction: column; gap: 0.3rem; margin-bottom: 2rem; max-height: 260px; overflow-y: auto; }
-    .venue-list a { font-size: 0.85rem; padding: 0.4rem 0.7rem; border-radius: 4px; background: #f0f0f0; color: #333; text-decoration: none; cursor: pointer; transition: background 0.15s, color 0.15s; }
-    .venue-list a:hover, .venue-list a.active { background: #111; color: #fff; }
-    .venue-loc { font-size: 0.75rem; color: #999; margin-left: 0.4rem; }
-    .venue-list a.active .venue-loc { color: rgba(255,255,255,0.5); }
-    #venue-title { font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 0.3rem; }
-    #venue-title a { color: #111; text-decoration: none; border-bottom: 1px solid rgba(0,0,0,0.15); }
-    #venue-meta { font-size: 0.85rem; color: #999; margin-bottom: 1.5rem; }
-    .show-row { display: flex; align-items: baseline; gap: 1rem; padding: 0.5rem 0; border-bottom: 1px solid #f0f0f0; }
-    .show-row:last-child { border-bottom: none; }
-    .show-date { font-weight: 500; font-size: 0.9rem; white-space: nowrap; }
-    .show-date a { color: #111; text-decoration: none; border-bottom: 1px solid rgba(0,0,0,0.1); transition: border-color 0.2s; }
-    .show-date a:hover { border-color: #111; }
-    .show-tour { font-size: 0.8rem; color: #999; }
-    .status { font-size: 0.9rem; color: #999; }
-    .show-count { font-size: 0.85rem; color: #999; margin-bottom: 1rem; }
-  </style>
 </head>
 <body>
-  <header>
-    <div style="max-width:900px;margin:0 auto;">
+  <header class="site-header">
+    <div class="inner">
       <h1>Venue Explorer</h1>
       <p>Every venue Phish has played, and when</p>
+      <nav>
+        <a href="../index.html">Home</a>
+        <a href="latest-setlist.html">Latest Setlist</a>
+        <a href="setlist-browser.html">Setlist Browser</a>
+        <a href="song-explorer.html">Song Explorer</a>
+        <a href="jam-charts.html">Jam Charts</a>
+        <a href="venue-explorer.html" class="active">Venue Explorer</a>
+      </nav>
     </div>
   </header>
 
   <main>
     <div class="search-bar">
-      <input type="text" id="filter" placeholder="Search venues…" autocomplete="off">
+      <input type="text" id="filter" placeholder="Search venues, cities, states&hellip;" autocomplete="off">
     </div>
-    <div class="venue-list" id="venue-list"><span class="status">Loading venues…</span></div>
+    <div class="scroll-list" id="venue-list"><span class="status">Loading venues&hellip;</span></div>
     <div id="venue-title"></div>
-    <div id="venue-meta"></div>
+    <p class="show-location" id="venue-meta"></p>
     <div id="results"></div>
   </main>
 
-  <footer>
+  <footer class="site-footer">
     Data provided by <a href="https://phish.net">Phish.net</a> &middot;
     <a href="https://docs.phish.net">API Docs</a>
   </footer>
 
-  <script src="../scripts/apikey.js"></script>
-  <script>
-    const venueListEl = document.getElementById('venue-list');
-    const resultsEl = document.getElementById('results');
-    const titleEl = document.getElementById('venue-title');
-    const metaEl = document.getElementById('venue-meta');
-    const filterEl = document.getElementById('filter');
-    let allVenues = [];
-
-    fetch('https://api.phish.net/v5/venues.json?apikey=' + apikey)
-      .then(r => r.json())
-      .then(json => {
-        allVenues = (json.data || []).sort((a, b) => a.venuename.localeCompare(b.venuename));
-        renderVenueList('');
-      })
-      .catch(() => {
-        venueListEl.innerHTML = '<span class="status">Failed to load venues.</span>';
-      });
-
-    function renderVenueList(filter) {
-      const lower = filter.toLowerCase();
-      const filtered = lower
-        ? allVenues.filter(v =>
-            (v.venuename || '').toLowerCase().includes(lower) ||
-            (v.city || '').toLowerCase().includes(lower) ||
-            (v.state || '').toLowerCase().includes(lower) ||
-            (v.country || '').toLowerCase().includes(lower))
-        : allVenues.slice(0, 80); // show first 80 by default
-      if (!filtered.length) {
-        venueListEl.innerHTML = '<span class="status">No matching venues.</span>';
-        return;
-      }
-      venueListEl.innerHTML = filtered.slice(0, 200).map(v =>
-        `<a data-id="${v.venueid}" onclick="loadVenue(${v.venueid})">${v.venuename}<span class="venue-loc">${v.city}, ${v.state}${v.country !== 'USA' ? ', ' + v.country : ''}</span></a>`
-      ).join('');
-    }
-
-    filterEl.addEventListener('input', () => renderVenueList(filterEl.value));
-
-    function loadVenue(id) {
-      venueListEl.querySelectorAll('a').forEach(a =>
-        a.classList.toggle('active', a.dataset.id === String(id))
-      );
-      const venue = allVenues.find(v => v.venueid === id);
-      titleEl.innerHTML = venue
-        ? `<a href="https://phish.net/venue/${id}">${venue.venuename}</a>`
-        : '';
-      metaEl.textContent = venue
-        ? `${venue.city}, ${venue.state}${venue.country !== 'USA' ? ', ' + venue.country : ''}`
-        : '';
-      resultsEl.innerHTML = '<span class="status">Loading shows…</span>';
-
-      fetch('https://api.phish.net/v5/shows/venueid/' + id + '.json?order_by=showdate&direction=desc&apikey=' + apikey)
-        .then(r => r.json())
-        .then(json => {
-          const data = (json.data || []).filter(s => s.artistid === 1);
-          if (!data.length) {
-            resultsEl.innerHTML = '<span class="status">No Phish shows found at this venue.</span>';
-            return;
-          }
-          const countHtml = `<div class="show-count">${data.length} show${data.length !== 1 ? 's' : ''}</div>`;
-          resultsEl.innerHTML = countHtml + data.map(s =>
-            `<div class="show-row">
-              <span class="show-date"><a href="${s.permalink || 'https://phish.net/setlists/?d=' + s.showdate}">${s.showdate}</a></span>
-              <span class="show-tour">${s.tourname || ''}</span>
-            </div>`
-          ).join('');
-        })
-        .catch(() => {
-          resultsEl.innerHTML = '<span class="status">Failed to load shows.</span>';
-        });
-    }
-  </script>
+  <script src="../scripts/phishnet-client.js"></script>
+  <script src="../scripts/setlist-format.js"></script>
+  <script src="js/venue-explorer.js"></script>
 </body>
 </html>

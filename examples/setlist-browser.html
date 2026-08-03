@@ -1,87 +1,47 @@
-<html>
-	<head>
-		<title>Phish.net v5 API Test</title>
-		<script src="../scripts/apikey.js"></script>
-		<script type="text/javascript">
-			window.etpTitle = "Location";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Setlist Browser &ndash; Phish.net API Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bree+Serif&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="inner">
+      <h1>Setlist Browser</h1>
+      <p>Browse Phish shows by year or jump straight to a date</p>
+      <nav>
+        <a href="../index.html">Home</a>
+        <a href="latest-setlist.html">Latest Setlist</a>
+        <a href="setlist-browser.html" class="active">Setlist Browser</a>
+        <a href="song-explorer.html">Song Explorer</a>
+        <a href="jam-charts.html">Jam Charts</a>
+        <a href="venue-explorer.html">Venue Explorer</a>
+      </nav>
+    </div>
+  </header>
 
-			// Helper: load a JSONP script, removing any previous one with the same id
-			function jsonp(id, url) {
-				var old = document.getElementById(id);
-				if (old) old.remove();
-				var script = document.createElement('script');
-				script.id = id;
-				script.src = url;
-				document.head.appendChild(script);
-			}
+  <main>
+    <div class="search-bar">
+      <select id="year-select" aria-label="Select a year"></select>
+      <input type="date" id="date-input" aria-label="Show date">
+      <button type="button" id="load-btn">Load</button>
+    </div>
+    <div class="scroll-list" id="date-list"><span class="status">Choose a year above to see show dates&hellip;</span></div>
+    <div id="setlist"><p class="status">Loading&hellip;</p></div>
+  </main>
 
-			function display_showyears() {
-				jsonp('display_showyears',
-					'https://api.phish.net/v5/shows.json?apikey=' + apikey + '&order_by=showyear&callback=phishnet_year_nav');
-			}
+  <footer class="site-footer">
+    Data provided by <a href="https://phish.net">Phish.net</a> &middot;
+    <a href="https://docs.phish.net">API Docs</a>
+  </footer>
 
-			function load_location(field, arg, ttl) {
-				window.etpTitle = ttl;
-				jsonp(field + '-' + arg,
-					'https://api.phish.net/v5/shows/' + field + '/' + arg + '.json?apikey=' + apikey + '&order_by=showdate&callback=phishnet_venues');
-			}
-
-			function load_year(year) {
-				jsonp(year,
-					'https://api.phish.net/v5/setlists/showyear/' + year + '.json?apikey=' + apikey + '&callback=phishnet_years');
-			}
-
-			function load_showdate(showdate) {
-				document.getElementById('showdate').value = showdate;
-				load_setlist();
-			}
-
-			function load_setlist() {
-				var showdate = document.getElementById('showdate').value;
-				jsonp(showdate,
-					'https://api.phish.net/v5/setlists/showdate/' + showdate + '.json?apikey=' + apikey + '&order_by=showdate&callback=phishnet_setlist');
-			}
-
-			function load_songlist(slug) {
-				jsonp(slug,
-					'https://api.phish.net/v5/setlists/slug/' + slug + '.json?apikey=' + apikey + '&order_by=showdate&callback=phishnet_songlist');
-			}
-		</script>
-		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
-		<!-- version numbers are only used for cache busting --> 
-		<script src="../scripts/setlist.js?v=18"></script>
-		<script src="../scripts/song-list.js?v=18"></script>
-		<script src="../scripts/year-load.js?v=18"></script>
-		<script src="../scripts/venues.js?v=18"></script>
-		<script src="../scripts/display_showyears.js?v=18"></script>
-		
-	</head>
-	<body>
-		<p>&nbsp;</p>
-		<div class='container'>
-			<nav class="navbar navbar-expand-lg navbar navbar-light" style="background-color: #d2e1ec;">
-				<div class="container-fluid">
-					<a class="navbar-brand" href="#"><b>Phish.net API v5 Demo</b></a>
-					<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-				    	<span class="navbar-toggler-icon"></span>
-					</button>	
-					<div class="collapse navbar-collapse" id="navbarSupportedContent">
-						<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-						</ul>
-						<form class="d-flex">
-							<input class="form-control me-2" type="date" id="showdate" placeholder="YYYY-mm-dd" value="2009-11-01">
-							<button type="button" class="btn btn-sm btn-small btn-primary" onclick="load_setlist()">Load</button>
-						</form>
-					</div>
-				</div>
-			</nav>	
-			<br>
-			<div class='card-body' id="pnet_nav"></div>
-			<div id="setlist"></div>
-			<script>
-				display_showyears();
-				load_setlist();
-			</script>
-		</div>
-	</body>
+  <script src="../scripts/phishnet-client.js"></script>
+  <script src="../scripts/setlist-format.js"></script>
+  <script src="js/setlist-browser.js"></script>
+</body>
 </html>

@@ -1,3 +1,6 @@
-// Copy this file to apikey.js and replace with your own API key
-// Request one at https://phish.net/api
-var apikey = 'YOUR_API_KEY_HERE';
+// Copy this file to apikey.js (already gitignored) and add your own key.
+// Request one at https://phish.net/api/keys
+//
+// This file is only ever read by server.js (Node), never sent to the
+// browser -- the API key never appears in client-side JS.
+module.exports = 'YOUR_API_KEY_HERE';

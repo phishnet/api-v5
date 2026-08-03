@@ -6,84 +6,99 @@
   <title>Phish.net API v5 Examples</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bree+Serif&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  <style>
-    .readme { line-height: 1.8; font-size: 0.95rem; color: #444; }
-    .readme h2 { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 500; margin: 2rem 0 0.5rem; color: #111; }
-    .readme p { margin: 0.5rem 0; }
-    .readme ol, .readme ul { margin: 0.5rem 0 0.5rem 1.5rem; }
-    .readme li { margin: 0.3rem 0; }
-    .readme code { font-size: 0.85em; background: #f0f0f0; padding: 0.15em 0.4em; border-radius: 3px; }
-    .examples { margin: 2rem 0; }
-    .examples a { display: inline-block; padding: 0.6rem 1.4rem; margin: 0.3rem 0.3rem 0.3rem 0; border-radius: 6px; background: #111; color: #fff; text-decoration: none; font-size: 0.85rem; font-weight: 500; transition: background 0.15s; }
-    .examples a:hover { background: #333; }
-  </style>
 </head>
 <body>
-  <header>
-    <div style="max-width:900px;margin:0 auto;">
+  <header class="site-header">
+    <div class="inner">
       <h1>Phish.net API v5</h1>
-      <p>Example uses of the Phish.net API</p>
+      <p>An example suite for fetching and displaying Phish.net data</p>
+      <nav>
+        <a href="index.html" class="active">Home</a>
+        <a href="examples/latest-setlist.html">Latest Setlist</a>
+        <a href="examples/setlist-browser.html">Setlist Browser</a>
+        <a href="examples/song-explorer.html">Song Explorer</a>
+        <a href="examples/jam-charts.html">Jam Charts</a>
+        <a href="examples/venue-explorer.html">Venue Explorer</a>
+      </nav>
     </div>
   </header>
 
-  <main style="max-width:900px;">
-    <div class="examples" id="examples"><h2 style="margin-top:0;">Examples:</h2></div>
-    <div class="readme" id="readme"></div>
+  <main>
+    <p>
+      This repo is a from-scratch set of examples showing how to call the
+      <a href="https://docs.phish.net">Phish.net API v5</a> from plain HTML and
+      JavaScript &mdash; no framework, no build tooling, no npm dependencies.
+      Each page below is a self-contained, working demo.
+    </p>
+
+    <div class="home-links">
+      <a href="examples/latest-setlist.html">
+        <h3>Latest Setlist</h3>
+        <p>The simplest example: one API call that fetches and renders the most recent Phish show.</p>
+      </a>
+      <a href="examples/setlist-browser.html">
+        <h3>Setlist Browser</h3>
+        <p>Browse by year or jump straight to a date, with jam-chart highlighting and links out to songs and venues.</p>
+      </a>
+      <a href="examples/song-explorer.html">
+        <h3>Song Explorer</h3>
+        <p>Search every song Phish has played and see debut date, times played, and full performance history.</p>
+      </a>
+      <a href="examples/jam-charts.html">
+        <h3>Jam Chart Explorer</h3>
+        <p>Browse Phish.net's curated list of notable jams, song by song.</p>
+      </a>
+      <a href="examples/venue-explorer.html">
+        <h3>Venue Explorer</h3>
+        <p>Search every venue Phish has played and see the full show history at each one.</p>
+      </a>
+    </div>
+
+    <h2>Setup</h2>
+    <ol>
+      <li>Request a free API key at <a href="https://phish.net/api/keys">phish.net/api/keys</a>.</li>
+      <li>Copy <code>scripts/apikey.example.js</code> to <code>scripts/apikey.js</code> and paste in your key.</li>
+      <li>Run <code>node server.js</code> (or <code>npm start</code>), then open <a href="http://localhost:8000">http://localhost:8000</a>.</li>
+    </ol>
+    <p>
+      This needs Node installed, but nothing else &mdash; <code>server.js</code> has zero dependencies, so there's
+      no <code>npm install</code> step.
+    </p>
+
+    <h2>How it works</h2>
+    <p>
+      Every page loads two shared, dependency-free scripts from <code>scripts/</code>:
+    </p>
+    <ul>
+      <li><code>phishnet-client.js</code> &mdash; a small client with one function, <code>PhishNet.phishnet(path, params)</code>, that <code>fetch()</code>es the API (through the local proxy) and returns its <code>data</code> array (or throws with a readable message on error).</li>
+      <li><code>setlist-format.js</code> &mdash; shared HTML rendering for setlists, used by both the Latest Setlist and Setlist Browser examples.</li>
+    </ul>
+    <p>
+      <strong>Why this needs a local server at all:</strong> api.phish.net does not send
+      <code>Access-Control-Allow-Origin</code> headers, so a cross-origin <code>fetch()</code> straight from a
+      page on a different origin is blocked before the response body can be read. The API's own documented
+      workaround for this &mdash; a <code>callback</code> parameter for <a href="https://docs.phish.net/callbacks">JSONP</a>
+      &mdash; turns out not to work in a modern browser either: its callback-wrapped response is still served as
+      <code>Content-Type: application/json</code> with <code>X-Content-Type-Options: nosniff</code>, which
+      Chrome, Firefox, and Safari all refuse to execute as a <code>&lt;script&gt;</code> (confirmed against the
+      live API). <code>server.js</code> serves these static files <em>and</em> proxies <code>/api/*</code>
+      requests to api.phish.net server-side, where neither restriction applies &mdash; so the browser code is
+      just plain <code>fetch()</code>, and your API key never has to leave the server.
+    </p>
+
+    <h2>License</h2>
+    <p>This code is free as in beer &mdash; use it or modify it as you wish, no attribution required.</p>
+
+    <h2>Disclaimer</h2>
+    <p>The Mockingbird Foundation and Phish.net make no warranties about this code and are not responsible for any effects that may come from use of it.</p>
   </main>
 
-  <footer>
+  <footer class="site-footer">
     Data provided by <a href="https://phish.net">Phish.net</a> &middot;
     <a href="https://docs.phish.net">API Docs</a> &middot;
     <a href="https://github.com/phishnet/api-v5">GitHub</a>
   </footer>
-
-  <script>
-    // Scan /examples/ for .html files and build links
-    const exampleFiles = [
-      { href: 'examples/setlist-browser.html', label: 'Setlist Browser' },
-      { href: 'examples/recent-setlists.html', label: 'Recent Setlists' },
-      { href: 'examples/jam-chart.html', label: 'Jam Chart Explorer' },
-      { href: 'examples/venue-explorer.html', label: 'Venue Explorer' }
-    ];
-    const exEl = document.getElementById('examples');
-    exEl.innerHTML += exampleFiles.map(f =>
-      `<a href="${f.href}">${f.label}</a>`
-    ).join('');
-
-    // Fetch and render README.md as simple HTML
-    fetch('README.md')
-      .then(r => r.text())
-      .then(md => {
-        const html = md
-          .split('\n')
-          .filter(line => !line.startsWith('# '))  // skip the h1, we have our own header
-          .join('\n')
-          .replace(/^## (.+)$/gm, '<h2>$1</h2>')
-          .replace(/^(\d+)\. (.+)$/gm, '<li>$2</li>')
-          .replace(/`([^`]+)`/g, '<code>$1</code>')
-          .replace(/(<li>.*<\/li>\n?)+/g, match => '<ol>' + match + '</ol>')
-          .replace(/\n{2,}/g, '</p><p>')
-          .replace(/^(?!<[ho])/gm, function(m, offset, str) {
-            // wrap loose text lines in <p> if not already a tag
-            return '';
-          });
-        // Clean pass: wrap remaining bare text in paragraphs
-        const cleaned = html
-          .split('\n')
-          .map(line => {
-            const trimmed = line.trim();
-            if (!trimmed) return '';
-            if (trimmed.startsWith('<')) return trimmed;
-            return '<p>' + trimmed + '</p>';
-          })
-          .join('\n');
-        document.getElementById('readme').innerHTML = cleaned;
-      })
-      .catch(() => {
-        document.getElementById('readme').innerHTML = '<p>Could not load README.</p>';
-      });
-  </script>
 </body>
 </html>
