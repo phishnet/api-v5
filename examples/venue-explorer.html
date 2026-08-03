@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Venue Explorer &ndash; Phish.net API Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bree+Serif&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="inner">
+      <h1>Venue Explorer</h1>
+      <p>Every venue Phish has played, and when</p>
+      <nav>
+        <a href="../index.html">Home</a>
+        <a href="latest-setlist.html">Latest Setlist</a>
+        <a href="setlist-browser.html">Setlist Browser</a>
+        <a href="song-explorer.html">Song Explorer</a>
+        <a href="jam-charts.html">Jam Charts</a>
+        <a href="venue-explorer.html" class="active">Venue Explorer</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="search-bar">
+      <input type="text" id="filter" placeholder="Search venues, cities, states&hellip;" autocomplete="off">
+    </div>
+    <div class="scroll-list" id="venue-list"><span class="status">Loading venues&hellip;</span></div>
+    <div id="venue-title"></div>
+    <p class="show-location" id="venue-meta"></p>
+    <div id="results"></div>
+  </main>
+
+  <footer class="site-footer">
+    Data provided by <a href="https://phish.net">Phish.net</a> &middot;
+    <a href="https://docs.phish.net">API Docs</a>
+  </footer>
+
+  <script src="../scripts/phishnet-client.js"></script>
+  <script src="../scripts/setlist-format.js"></script>
+  <script src="js/venue-explorer.js"></script>
+</body>
+</html>

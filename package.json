@@ -1,0 +1,8 @@
+{
+  "name": "phishnet-api-v5-examples",
+  "private": true,
+  "description": "Example suite for the Phish.net API v5",
+  "scripts": {
+    "start": "node server.js"
+  }
+}

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Setlist Browser &ndash; Phish.net API Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bree+Serif&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="inner">
+      <h1>Setlist Browser</h1>
+      <p>Browse Phish shows by year or jump straight to a date</p>
+      <nav>
+        <a href="../index.html">Home</a>
+        <a href="latest-setlist.html">Latest Setlist</a>
+        <a href="setlist-browser.html" class="active">Setlist Browser</a>
+        <a href="song-explorer.html">Song Explorer</a>
+        <a href="jam-charts.html">Jam Charts</a>
+        <a href="venue-explorer.html">Venue Explorer</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="search-bar">
+      <select id="year-select" aria-label="Select a year"></select>
+      <input type="date" id="date-input" aria-label="Show date">
+      <button type="button" id="load-btn">Load</button>
+    </div>
+    <div class="scroll-list" id="date-list"><span class="status">Choose a year above to see show dates&hellip;</span></div>
+    <div id="setlist"><p class="status">Loading&hellip;</p></div>
+  </main>
+
+  <footer class="site-footer">
+    Data provided by <a href="https://phish.net">Phish.net</a> &middot;
+    <a href="https://docs.phish.net">API Docs</a>
+  </footer>
+
+  <script src="../scripts/phishnet-client.js"></script>
+  <script src="../scripts/setlist-format.js"></script>
+  <script src="js/setlist-browser.js"></script>
+</body>
+</html>
