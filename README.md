@@ -17,7 +17,7 @@ Support for passing your API key as an `?apikey=` query string parameter will be
 ### Keep your key secret
 
 - **Never put your API key in client-side code** (browser JavaScript, mobile apps, public repos). Anyone can read it.
-- Call the API from a server, and have your front end talk to your server. The React example shows this with a small proxy.
+- Call the API from a server, and have your front end talk to your server. The [example app](#example-app) shows this with a small proxy.
 - Load the key from an environment variable (`PHISHNET_API_KEY`) or a secrets manager, not from source files.
 - JSONP can't send custom headers, so it is no longer supported by these examples.
 
@@ -34,7 +34,19 @@ Each example fetches the setlist for 1997-11-22 and prints it. Set `PHISHNET_API
 | Python | [examples/python.py](examples/python.py) | `python examples/python.py` |
 | Go | [examples/go.go](examples/go.go) | `go run examples/go.go` |
 | C# | [examples/csharp.cs](examples/csharp.cs) | `dotnet run` (in a .NET 6+ project) |
-| React | [examples/react/](examples/react) | Express proxy (`server.js`) + component (`src/Setlist.jsx`) |
+
+## Example App
+
+[examples/app/](examples/app) is a full React (Vite) app with a setlist browser, jam chart explorer and venue explorer. A small Express server proxies requests and adds the `X-API-KEY` header, so the key stays on the server.
+
+```
+cd examples/app
+cp .env.example .env     # add your API key
+npm install
+npm run dev              # http://localhost:5173
+```
+
+The proxy only forwards an allowlist of API paths (see `server/index.js`).
 
 ## License
 
