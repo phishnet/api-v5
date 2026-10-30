@@ -12,7 +12,7 @@ Send your API key in the `X-API-KEY` request header:
 curl -H "X-API-KEY: $PHISHNET_API_KEY" https://api.phish.net/v5/setlists/showdate/1997-11-22.json
 ```
 
-Passing the key as an `?apikey=` query-string parameter is deprecated. Query strings end up in server logs, browser history and referrer headers, so the header is the preferred method.
+Support for passing your API key as an `?apikey=` query string parameter will be phased out in a future API version, so we encourage using the future-proof X-API-KEY header. Query strings end up in server logs, browser history and referrer headers, so the header is the preferred method.
 
 ### Keep your key secret
 
@@ -21,7 +21,7 @@ Passing the key as an `?apikey=` query-string parameter is deprecated. Query str
 - Load the key from an environment variable (`PHISHNET_API_KEY`) or a secrets manager, not from source files.
 - JSONP can't send custom headers, so it is no longer supported by these examples.
 
-You can request a key at [phish.net/api](https://phish.net/api).
+You can request a key at [phish.net/api/keys](https://phish.net/api/keys).
 
 ## Examples
 
@@ -34,19 +34,7 @@ Each example fetches the setlist for 1997-11-22 and prints it. Set `PHISHNET_API
 | Python | [examples/python.py](examples/python.py) | `python examples/python.py` |
 | Go | [examples/go.go](examples/go.go) | `go run examples/go.go` |
 | C# | [examples/csharp.cs](examples/csharp.cs) | `dotnet run` (in a .NET 6+ project) |
-
-## Example App
-
-[examples/app/](examples/app) is a full React (Vite) app with a setlist browser, jam chart explorer and venue explorer. A small Express server proxies requests and adds the `X-API-KEY` header, so the key stays on the server.
-
-```
-cd examples/app
-cp .env.example .env     # add your API key
-npm install
-npm run dev              # http://localhost:5173
-```
-
-The proxy only forwards an allowlist of API paths (see `server/index.js`).
+| React | [examples/react/](examples/react) | Express proxy (`server.js`) + component (`src/Setlist.jsx`) |
 
 ## License
 
