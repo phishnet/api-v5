@@ -36,7 +36,13 @@ export default function Venues() {
         {venue && <h2><a href={`https://phish.net/venue/${venue.venueid}`}>{venue.venuename}</a></h2>}
         {venue && <div className="meta">{place(venue)}</div>}
         <Status {...shows} />
-        {venue && !shows.loading && <p className="meta">{phishShows.length} show{phishShows.length === 1 ? '' : 's'}</p>}
+        {venue && !shows.loading && !shows.error && (
+          <p className="meta">
+            {phishShows.length === 0
+              ? 'No Phish shows at this venue. It may have hosted other artists.'
+              : `${phishShows.length} show${phishShows.length === 1 ? '' : 's'}`}
+          </p>
+        )}
         {phishShows.map((s) => (
           <div className="row" key={s.showid ?? s.showdate}>
             <a href={s.permalink}>{s.showdate}</a><span>{s.tourname}</span>
