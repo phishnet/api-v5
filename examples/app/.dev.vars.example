@@ -1,2 +1,0 @@
-# Local secret for `npm run preview` (wrangler dev)
-PHISHNET_API_KEY=YOUR_API_KEY_HERE
